@@ -25,6 +25,11 @@ pygame.display.set_caption("Permainan Ular-Ularan")
 clock = pygame.time.Clock()
 kecepatan_permainan = 15
 
+# Musik latar belakang
+pygame.mixer.music.load("background_music.mp3")
+pygame.mixer.music.set_volume(0.2)  # Mengatur volume musik (0.0 - 1.0)
+pygame.mixer.music.play(-1)  # Mengulang musik latar belakang secara terus-menerus
+
 # Fungsi untuk menggambar ular
 def gambar_ular(ukuran_blok, ular):
     for blok in ular:
