@@ -1,5 +1,6 @@
 import pygame
 import random
+import json
 
 # Inisialisasi pygame
 pygame.init()
@@ -102,28 +103,50 @@ def tampilkan_pengaturan():
 
         clock.tick(10)
 
+    # Menyimpan pengaturan ke file JSON
+    simpan_pengaturan(kecepatan_pergerakan)
     tampilkan_menu_awal()
+
+# Fungsi untuk menyimpan pengaturan ke file JSON
+def simpan_pengaturan(kecepatan):
+    pengaturan = {
+        "kecepatan_pergerakan": kecepatan
+    }
+    with open("pengaturan.json", "w") as file:
+        json.dump(pengaturan, file)
+
+# Fungsi untuk memuat pengaturan dari file JSON
+def muat_pengaturan():
+    try:
+        with open("pengaturan.json", "r") as file:
+            pengaturan = json.load(file)
+            return pengaturan["kecepatan_pergerakan"]
+    except FileNotFoundError:
+        return kecepatan_permainan
 
 # Fungsi untuk menjalankan permainan
 def permainan_ular():
     game_over = False
     game_selesai = False
 
-    # Koordinat awal ular
+    # Mengatur posisi awal ular
     x_ular = lebar_layar / 2
     y_ular = tinggi_layar / 2
 
-    # Perubahan koordinat ular
+    # Mengatur perubahan posisi awal ular
     perubahan_x = 0
     perubahan_y = 0
 
-    # Membuat ular
+    # Membuat ular sebagai list
     ular = []
     panjang_ular = 1
 
-    # Membuat makanan
+    # Mengatur posisi makanan
     posisi_makanan = [random.randrange(1, lebar_layar // ukuran_blok) * ukuran_blok,
                       random.randrange(1, tinggi_layar // ukuran_blok) * ukuran_blok]
+
+    # Memuat pengaturan kecepatan pergerakan
+    kecepatan_permainan = muat_pengaturan()
 
     while not game_over:
         while game_selesai:
@@ -187,9 +210,11 @@ def permainan_ular():
 
         # Menggambar ular
         gambar_ular(ukuran_blok, ular)
+
+        # Mengupdate layar permainan
         pygame.display.update()
 
-        # Mengecek jika ular memakan makanan
+        # Mengecek jika ular makan makanan
         if x_ular == posisi_makanan[0] and y_ular == posisi_makanan[1]:
             posisi_makanan = [random.randrange(1, lebar_layar // ukuran_blok) * ukuran_blok,
                               random.randrange(1, tinggi_layar // ukuran_blok) * ukuran_blok]
