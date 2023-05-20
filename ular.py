@@ -29,6 +29,81 @@ def gambar_ular(ukuran_blok, ular):
     for blok in ular:
         pygame.draw.rect(layar, warna_merah, [blok[0], blok[1], ukuran_blok, ukuran_blok])
 
+# Fungsi untuk menampilkan menu awal
+def tampilkan_menu_awal():
+    menu_selesai = False
+
+    while not menu_selesai:
+        layar.fill(warna_putih)
+        font = pygame.font.Font(None, 40)
+
+        teks_start_game = font.render("Start Game", True, warna_hitam)
+        teks_pengaturan = font.render("Pengaturan", True, warna_hitam)
+        teks_selesai = font.render("Selesai", True, warna_hitam)
+
+        posisi_teks_start_game = (lebar_layar / 2 - teks_start_game.get_width() / 2, tinggi_layar / 2 - 50)
+        posisi_teks_pengaturan = (lebar_layar / 2 - teks_pengaturan.get_width() / 2, tinggi_layar / 2)
+        posisi_teks_selesai = (lebar_layar / 2 - teks_selesai.get_width() / 2, tinggi_layar / 2 + 50)
+
+        layar.blit(teks_start_game, posisi_teks_start_game)
+        layar.blit(teks_pengaturan, posisi_teks_pengaturan)
+        layar.blit(teks_selesai, posisi_teks_selesai)
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if posisi_teks_start_game[0] <= mouse_pos[0] <= posisi_teks_start_game[0] + teks_start_game.get_width() and \
+                        posisi_teks_start_game[1] <= mouse_pos[1] <= posisi_teks_start_game[1] + teks_start_game.get_height():
+                    permainan_ular()
+                elif posisi_teks_pengaturan[0] <= mouse_pos[0] <= posisi_teks_pengaturan[0] + teks_pengaturan.get_width() and \
+                        posisi_teks_pengaturan[1] <= mouse_pos[1] <= posisi_teks_pengaturan[1] + teks_pengaturan.get_height():
+                    tampilkan_pengaturan()
+                elif posisi_teks_selesai[0] <= mouse_pos[0] <= posisi_teks_selesai[0] + teks_selesai.get_width() and \
+                        posisi_teks_selesai[1] <= mouse_pos[1] <= posisi_teks_selesai[1] + teks_selesai.get_height():
+                    pygame.quit()
+
+# Fungsi untuk menampilkan pengaturan
+def tampilkan_pengaturan():
+    pengaturan_selesai = False
+    kecepatan_pergerakan = kecepatan_permainan
+
+    while not pengaturan_selesai:
+        layar.fill(warna_putih)
+        font = pygame.font.Font(None, 40)
+
+        teks_kecepatan = font.render("Kecepatan Pergerakan: " + str(kecepatan_pergerakan), True, warna_hitam)
+        teks_kembali = font.render("Kembali", True, warna_hitam)
+
+        posisi_teks_kecepatan = (lebar_layar / 2 - teks_kecepatan.get_width() / 2, tinggi_layar / 2 - 50)
+        posisi_teks_kembali = (lebar_layar / 2 - teks_kembali.get_width() / 2, tinggi_layar / 2)
+
+        layar.blit(teks_kecepatan, posisi_teks_kecepatan)
+        layar.blit(teks_kembali, posisi_teks_kembali)
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if posisi_teks_kecepatan[0] <= mouse_pos[0] <= posisi_teks_kecepatan[0] + teks_kecepatan.get_width() and \
+                        posisi_teks_kecepatan[1] <= mouse_pos[1] <= posisi_teks_kecepatan[1] + teks_kecepatan.get_height():
+                    kecepatan_pergerakan += 1
+                    if kecepatan_pergerakan > 30:
+                        kecepatan_pergerakan = 1
+                elif posisi_teks_kembali[0] <= mouse_pos[0] <= posisi_teks_kembali[0] + teks_kembali.get_width() and \
+                        posisi_teks_kembali[1] <= mouse_pos[1] <= posisi_teks_kembali[1] + teks_kembali.get_height():
+                    pengaturan_selesai = True
+
+        clock.tick(10)
+
+    tampilkan_menu_awal()
+
 # Fungsi untuk menjalankan permainan
 def permainan_ular():
     game_over = False
@@ -126,4 +201,4 @@ def permainan_ular():
     pygame.quit()
 
 # Memulai permainan
-permainan_ular()
+tampilkan_menu_awal()
